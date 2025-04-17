@@ -4,14 +4,12 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // 2. Ваши данные из Supabase (ЗАМЕНИТЕ ЭТО НА СВОЁ)
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
+  const supabaseUrl = 'https://xvafqjzyjsmohoyiyeqs.supabase.co'; // Замените на ваш URL
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g'; // Замените на ваш ключ
 
-  // 3. Инициализация Supabase (не меняйте эту строку)
+  // Инициализация Supabase
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-  // 4. Проверка подключения (можно удалить после теста)
-  console.log('Supabase подключен!');
+  console.log('Supabase initialized:', supabase); // Проверка в консоли
 
   // 5. Загрузка фильмов
   async function loadMovies() {
