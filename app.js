@@ -1,16 +1,16 @@
-// Инициализация Supabase (замените значения на свои!)
-const supabaseUrl = 'https://xvafqjzyjsmohoyiyeqs.supabase.co'; // Ваш URL из Supabase
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g'; // Ваш "anon public" ключ из Supabase
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-// DOM-элементы
+// Получаем элементы DOM
 const moviesList = document.getElementById('movies-list');
 const addMovieForm = document.getElementById('add-movie');
 
-// Загрузка фильмов
+// Инициализация Supabase (замените значения на свои!)
+const supabaseUrl = 'https://xvafqjzyjsmohoyiyeqs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// Функция загрузки фильмов
 async function loadMovies() {
   try {
-    moviesList.innerHTML = '<p>Загрузка...</p>';
+    moviesList.innerHTML = '<p>Загрузка фильмов...</p>';
     
     const { data: movies, error } = await supabase
       .from('movies')
@@ -20,7 +20,7 @@ async function loadMovies() {
     if (error) throw error;
 
     if (movies.length === 0) {
-      moviesList.innerHTML = '<p>Фильмов нет. Добавьте первый!</p>';
+      moviesList.innerHTML = '<p>Фильмов пока нет. Добавьте первый!</p>';
       return;
     }
 
@@ -33,42 +33,32 @@ async function loadMovies() {
       </div>
     `).join('');
 
-    // Вешаем обработчики удаления
+    // Добавляем обработчики удаления
     document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', deleteMovie);
+      btn.addEventListener('click', async () => {
+        if (!confirm('Удалить этот фильм?')) return;
+        const movieId = btn.closest('.movie-card').dataset.id;
+        
+        const { error } = await supabase
+          .from('movies')
+          .delete()
+          .eq('id', movieId);
+          
+        if (!error) loadMovies();
+      });
     });
 
-  } catch (err) {
-    console.error('Ошибка загрузки:', err);
-    moviesList.innerHTML = '<p>Ошибка загрузки. Обновите страницу.</p>';
+  } catch (error) {
+    console.error('Ошибка загрузки:', error);
+    moviesList.innerHTML = '<p>Ошибка загрузки фильмов. Пожалуйста, обновите страницу.</p>';
   }
 }
 
-// Удаление фильма
-async function deleteMovie(e) {
-  if (!confirm('Удалить этот фильм?')) return;
-  
-  const movieId = e.target.closest('.movie-card').dataset.id;
-  
-  try {
-    const { error } = await supabase
-      .from('movies')
-      .delete()
-      .eq('id', movieId);
-
-    if (error) throw error;
-    loadMovies();
-  } catch (err) {
-    console.error('Ошибка удаления:', err);
-    alert('Не удалось удалить фильм');
-  }
-}
-
-// Добавление фильма
+// Обработчик формы добавления фильма
 addMovieForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  const movie = {
+  const newMovie = {
     title: document.getElementById('title').value,
     year: parseInt(document.getElementById('year').value),
     rating: parseFloat(document.getElementById('rating').value) || null,
@@ -79,19 +69,17 @@ addMovieForm.addEventListener('submit', async (e) => {
   try {
     const { error } = await supabase
       .from('movies')
-      .insert([movie]);
+      .insert([newMovie]);
 
     if (error) throw error;
     
     addMovieForm.reset();
     loadMovies();
-  } catch (err) {
-    console.error('Ошибка добавления:', err);
-    alert('Ошибка при добавлении фильма');
+  } catch (error) {
+    console.error('Ошибка добавления:', error);
+    alert('Не удалось добавить фильм');
   }
 });
 
-// Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
-  loadMovies();
-});
+// Загружаем фильмы при старте
+document.addEventListener('DOMContentLoaded', loadMovies);
