@@ -1,6 +1,6 @@
 // Инициализация Supabase (замените значения на свои!)
-const supabaseUrl = 'https://ваш-project-id.supabase.co'; // Ваш URL из Supabase
-const supabaseKey = 'ваш-anon-key'; // Ваш "anon public" ключ из Supabase
+const supabaseUrl = 'https://xvafqjzyjsmohoyiyeqs.supabase.co'; // Ваш URL из Supabase
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g'; // Ваш "anon public" ключ из Supabase
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // DOM-элементы
