@@ -67,6 +67,8 @@ h1 {
 
 /* Форма добавления фильма */
 #add-movie {
+  flex-direction: column;
+  display: flex;
   background: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
