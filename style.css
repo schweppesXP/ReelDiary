@@ -91,22 +91,24 @@ h1 {
 }
 
 .delete-btn {
-  background-color: #ff4444; /* Красный фон */
-  color: white; /* Белый текст */
-  border: none; /* Убираем стандартную рамку */
-  border-radius: 4px; /* Закругляем углы */
-  padding: 6px 12px; /* Отступы внутри кнопки */
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
   font-size: 14px;
-  cursor: pointer; /* Меняем курсор при наведении */
-  transition: all 0.3s ease; /* Плавные анимации */
-  margin-top: 10px; /* Отступ сверху */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  width: 100%;
+  font-family: inherit;
 }
 
 .delete-btn:hover {
-  background-color: #cc0000; /* Темнее красный при наведении */
-  transform: scale(1.05); /* Легкое увеличение */
+  background-color: #cc0000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .delete-btn:active {
-  transform: scale(0.98); /* Эффект нажатия */
+  transform: translateY(1px);
 }
