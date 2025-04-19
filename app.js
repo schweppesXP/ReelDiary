@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       year: parseInt(document.getElementById('year').value),
       rating: parseFloat(document.getElementById('rating').value) || null,
       genre: document.getElementById('genre').value || null,
-      poster_url: document.getElementById('poster_url').value || 'https://via.placeholder.com/200x300'
+      poster_url: document.getElementById('poster_url').value || 'https://steamuserimages-a.akamaihd.net/ugc/2079019457927111911/45068F1A462AF6EB757ADABDD621AB5FDE49E38E/?imw=512&amp;imh=512&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true'
     };
 
     try {
