@@ -61,6 +61,10 @@ h1 {
   color: var(--secondary);
 }
 
+.movie-card p {
+  margin-left: 10px;
+}
+
 /* Форма добавления фильма */
 #add-movie {
   background: #f8f9fa;
