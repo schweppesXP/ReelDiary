@@ -2,12 +2,14 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Мои фильмы</title>
-  <link rel="stylesheet" href="style.css">
+  <title>ReelDiary</title>
+  <link rel="stylesheet" href="./style.css">
+  <!-- Подключаем Supabase CDN -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Моя коллекция фильмов</h1>
+    <h1>Мои фильмы</h1>
     
     <form id="add-movie">
       <input type="text" id="title" placeholder="Название" required>
@@ -21,8 +23,7 @@
     <div id="movies-list" class="movies-grid"></div>
   </div>
 
-  <!-- Подключаем Supabase JS -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+  <!-- Подключаем наш скрипт как классический (не модуль) -->
+  <script src="./app.js"></script>
 </body>
 </html>
