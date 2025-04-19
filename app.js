@@ -1,7 +1,19 @@
+// Ждем полной загрузки страницы И библиотеки Supabase
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Проверяем, что Supabase загружен
+  if (!window.supabase) {
+    console.error('Supabase не загружен! Проверьте подключение скрипта в HTML');
+    return;
+  }
+
 // Инициализация Supabase (ВСТАВЬТЕ СВОИ ДАННЫЕ)
 const supabaseUrl = 'https://xvafqjzyjsmohoyiyeqs.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// 3. Проверка подключения
+console.log('Supabase подключен:', supabase);
+
 
 // DOM элементы
 const moviesList = document.getElementById('movies-list');
