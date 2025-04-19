@@ -2,50 +2,28 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReelDiary - Трекер фильмов</title>
+  <title>ReelDiary</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Подключаем Supabase CDN -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="container">
-    <h1>ReelDiary</h1>
+    <h1>Мои фильмы</h1>
     
-    <div class="categories">
-      <button class="category-btn active" data-category="all">Все</button>
-      <button class="category-btn" data-category="movie">Фильмы</button>
-      <button class="category-btn" data-category="series">Сериалы</button>
-      <button class="category-btn" data-category="cartoon">Мультфильмы</button>
-      <button class="category-btn" data-category="anime">Аниме</button>
-    </div>
-
-    <div class="add-movie-form">
-      <h2>Добавить фильм</h2>
+    <form id="add-movie">
       <input type="text" id="title" placeholder="Название" required>
-      <input type="text" id="year" placeholder="Год" required>
-      <input type="text" id="poster" placeholder="URL постера">
-      
-      <!-- Сохраняем input для рейтинга как в вашем репозитории -->
-      <input type="text" id="rating" placeholder="Рейтинг (1-10)">
-      
-      <!-- Input для жанра как у вас -->
+      <input type="number" id="year" placeholder="Год" required>
+      <input type="number" id="rating" placeholder="Рейтинг (1-5)" step="0.1" min="1" max="5">
       <input type="text" id="genre" placeholder="Жанр">
-      
-      <select id="category-select">
-        <option value="movie">Фильм</option>
-        <option value="series">Сериал</option>
-        <option value="cartoon">Мультфильм</option>
-        <option value="anime">Аниме</option>
-      </select>
-      
-      <button id="add-btn">Добавить</button>
-    </div>
+      <input type="text" id="poster_url" placeholder="Ссылка на постер">
+      <button type="submit">Добавить</button>
+    </form>
 
-    <div class="movies-container" id="movies-container">
-      <!-- Карточки будут добавляться здесь -->
-    </div>
+    <div id="movies-list" class="movies-grid"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+  <!-- Подключаем наш скрипт как классический (не модуль) -->
+  <script src="./app.js"></script>
 </body>
 </html>
