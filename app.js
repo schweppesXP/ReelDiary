@@ -1,146 +1,97 @@
-// Инициализация Supabase
-const supabaseUrl = 'https://xvafqjzyjsmohoyiyeqs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+document.addEventListener('DOMContentLoaded', () => {
+  // Инициализация Supabase (замените значения!)
+  const supabaseUrl = 'https://xvafqjzyjsmohoyiyeqs.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g';
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// DOM элементы
-const moviesContainer = document.getElementById('movies-container');
-const titleInput = document.getElementById('title');
-const yearInput = document.getElementById('year');
-const posterInput = document.getElementById('poster');
-const ratingInput = document.getElementById('rating');
-const genreInput = document.getElementById('genre');
-const categorySelect = document.getElementById('category');
-const addBtn = document.getElementById('add-btn');
+  // DOM элементы
+  const moviesList = document.getElementById('movies-list');
+  const addForm = document.getElementById('add-movie');
 
-// Текущая категория
-let currentCategory = 'all';
+  // Функция загрузки фильмов
+  async function loadMovies() {
+    try {
+      moviesList.innerHTML = '<p>Загрузка...</p>';
+      
+      const { data: movies, error } = await supabase
+        .from('movies')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-// Загрузка фильмов
-async function loadMovies(category = 'all') {
-  let query = supabase.from('movies').select('*');
-  
-  if (category !== 'all') {
-    query = query.eq('category', category);
+      if (error) throw error;
+
+      if (movies.length === 0) {
+        moviesList.innerHTML = '<p>Фильмов нет. Добавьте первый!</p>';
+        return;
+      }
+
+      moviesList.innerHTML = movies.map(movie => `
+        <div class="movie-card" data-id="${movie.id}">
+          <img src="${movie.poster_url || 'https://via.placeholder.com/200x300'}" alt="${movie.title}">
+          <h3>${movie.title} (${movie.year})</h3>
+          <p>★ ${movie.rating || '-'} | ${movie.genre || '-'}</p>
+          <button class="delete-btn">Удалить</button>
+        </div>
+      `).join('');
+
+      // Вешаем обработчики удаления
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', deleteMovie);
+      });
+
+    } catch (err) {
+      console.error('Ошибка загрузки:', err);
+      moviesList.innerHTML = '<p>Ошибка загрузки. Обновите страницу.</p>';
+    }
   }
 
-  const { data: movies, error } = await query;
-  
-  if (error) {
-    console.error('Ошибка загрузки:', error);
-    return;
+  // Удаление фильма
+  async function deleteMovie(e) {
+    if (!confirm('Удалить этот фильм?')) return;
+    
+    const movieId = e.target.closest('.movie-card').dataset.id;
+    
+    try {
+      const { error } = await supabase
+        .from('movies')
+        .delete()
+        .eq('id', movieId);
+
+      if (error) throw error;
+      loadMovies();
+    } catch (err) {
+      console.error('Ошибка удаления:', err);
+      alert('Не удалось удалить фильм');
+    }
   }
 
-  renderMovies(movies || []);
-}
+  // Добавление фильма
+  addForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const movie = {
+      title: document.getElementById('title').value,
+      year: parseInt(document.getElementById('year').value),
+      rating: parseFloat(document.getElementById('rating').value) || null,
+      genre: document.getElementById('genre').value || null,
+      poster_url: document.getElementById('poster_url').value || 'https://steamuserimages-a.akamaihd.net/ugc/2079019457927111911/45068F1A462AF6EB757ADABDD621AB5FDE49E38E/?imw=512&amp;imh=512&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true'
+    };
 
-// Отображение фильмов
-function renderMovies(movies) {
-  moviesContainer.innerHTML = '';
-  movies.forEach(movie => {
-    moviesContainer.innerHTML += createMovieCard(movie);
+    try {
+      const { error } = await supabase
+        .from('movies')
+        .insert([movie]);
+
+      if (error) throw error;
+      
+      e.target.reset();
+      loadMovies();
+    } catch (err) {
+      console.error('Ошибка добавления:', err);
+      alert('Ошибка при добавлении фильма');
+    }
   });
-}
 
-// Создание карточки фильма
-function createMovieCard(movie) {
-  return `
-    <div class="movie-card" data-category="${movie.category || 'movie'}">
-      <span class="movie-category-tag">${getCategoryName(movie.category)}</span>
-      <button class="delete-btn" data-id="${movie.id}">×</button>
-      <img src="${movie.poster || 'https://via.placeholder.com/300x450'}" alt="${movie.title}">
-      <h3>${movie.title} (${movie.year})</h3>
-      ${movie.rating ? `<p>Рейтинг: ${movie.rating}</p>` : ''}
-      ${movie.genre ? `<p>Жанр: ${movie.genre}</p>` : ''}
-    </div>
-  `;
-}
-
-// Получение названия категории
-function getCategoryName(category) {
-  const names = {
-    movie: 'Фильм',
-    series: 'Сериал',
-    cartoon: 'Мультфильм',
-    anime: 'Аниме'
-  };
-  return names[category] || '';
-}
-
-// Добавление фильма
-async function addMovie() {
-  const title = titleInput.value.trim();
-  const year = yearInput.value.trim();
-  const poster = posterInput.value.trim();
-  const rating = ratingInput.value.trim();
-  const genre = genreInput.value.trim();
-  const category = categorySelect.value;
-
-  if (!title || !year) return;
-
-  try {
-    const { data, error } = await supabase
-      .from('movies')
-      .insert([{ 
-        title, 
-        year, 
-        poster, 
-        rating, 
-        genre, 
-        category 
-      }]);
-    
-    if (error) throw error;
-    
-    // Очищаем поля
-    titleInput.value = '';
-    yearInput.value = '';
-    posterInput.value = '';
-    ratingInput.value = '';
-    genreInput.value = '';
-    
-    loadMovies(currentCategory);
-  } catch (error) {
-    console.error('Ошибка добавления:', error);
-  }
-}
-
-// Удаление фильма
-async function deleteMovie(id) {
-  try {
-    const { error } = await supabase
-      .from('movies')
-      .delete()
-      .eq('id', id);
-    
-    if (error) throw error;
-    
-    loadMovies(currentCategory);
-  } catch (error) {
-    console.error('Ошибка удаления:', error);
-  }
-}
-
-// Обработчики событий
-addBtn.addEventListener('click', addMovie);
-
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('delete-btn')) {
-    const id = e.target.dataset.id;
-    deleteMovie(id);
-  }
-});
-
-// Обработчики кнопок категорий
-document.querySelectorAll('.category-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    currentCategory = btn.dataset.category;
-    loadMovies(currentCategory);
-    
-    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  });
-});
-
-// Первоначальная загрузка
-loadMovies();
+  // Запускаем приложение
+  loadMovies();
+}); // ← ЭТА закрывающая скобка была пропущена в вашем коде
