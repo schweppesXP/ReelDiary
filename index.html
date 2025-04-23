@@ -4,30 +4,13 @@
   <meta charset="UTF-8">
   <title>ReelDiary</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Подключаем Supabase CDN -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="container">
     <h1>Мои фильмы</h1>
     
-    <form id="add-movie">
-      <input type="text" id="title" placeholder="Название" required>
-      <input type="number" id="year" placeholder="Год" required>
-      <input type="number" id="rating" placeholder="Рейтинг (1-5)" step="0.1" min="1" max="5">
-      <input type="text" id="genre" placeholder="Жанр">
-      <input type="text" id="poster_url" placeholder="Ссылка на постер">
-      <!-- В форме добавления (после genre input) -->
-      <select>
-        <option value="movie">Фильм</option>
-        <option value="series">Сериал</option>
-        <option value="cartoon">Мультфильм</option>
-        <option value="anime">Аниме</option>
-      </select>
-      <button type="submit">Добавить</button>
-    </form> 
-
-    <!-- Добавляем после <h1> -->
+    <!-- Добавляем кнопки категорий -->
     <div class="categories">
       <button class="category-btn active" data-category="all">Все</button>
       <button class="category-btn" data-category="movie">Фильмы</button>
@@ -36,10 +19,25 @@
       <button class="category-btn" data-category="anime">Аниме</button>
     </div>
 
+    <form id="add-movie">
+      <input type="text" id="title" placeholder="Название" required>
+      <input type="number" id="year" placeholder="Год" required>
+      <input type="number" id="rating" placeholder="Рейтинг (1-5)" step="0.1" min="1" max="5">
+      <input type="text" id="genre" placeholder="Жанр">
+      <input type="text" id="poster_url" placeholder="Ссылка на постер">
+      <!-- Добавляем выбор категории -->
+      <select id="movie-category">
+        <option value="movie">Фильм</option>
+        <option value="series">Сериал</option>
+        <option value="cartoon">Мультфильм</option>
+        <option value="anime">Аниме</option>
+      </select>
+      <button type="submit">Добавить</button>
+    </form> 
+
     <div id="movies-list" class="movies-grid"></div>
   </div>
 
-  <!-- Подключаем наш скрипт как классический (не модуль) -->
   <script src="./app.js"></script>
 </body>
 </html>
