@@ -122,7 +122,7 @@ function renderMovieCard(movie) {
         <h3>${movie.title} (${movie.year})</h3>
         <p>★ ${movie.rating || '-'} | ${movie.genre || '-'}</p>
         ${movie.status === 'planned' ? `
-          <button class="mark-watched-btn">Отметить как просмотрено</button>
+          <button class="mark-watched-btn">🎬Отметить как просмотрено</button>
         ` : ''}
         <button class="delete-btn">Удалить</button>
       </div>
