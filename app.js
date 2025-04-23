@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const { data: movies, error } = await query;
       if (error) throw error;
 
-      if (!movies  movies.length === 0) {
+      if (!movies || movies.length === 0) {
         moviesList.innerHTML = '<p>Фильмов нет. Добавьте первый!</p>';
         return;
       }
