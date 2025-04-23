@@ -115,12 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 function renderMovieCard(movie) {
-    return `
-      <div class="movie-card" data-id="${movie.id}" data-category="${movie.category || 'movie'}">
-        <span class="category-badge">${getCategoryName(movie.category)}</span>
-        <img src="${movie.poster_url || 'https://avatars.mds.yandex.net/i?id=a743a0666e377970b63b78ff3d9fa505_sr-5859751-images-thumbs&n=13'}" alt="${movie.title}">
-        <h3>${movie.title} (${movie.year})</h3>
-        <p>★ ${movie.rating || '-'} | ${movie.genre || '-'}</p>
+  return `
+    <div class="movie-card" data-id="${movie.id}" data-category="${movie.category  'movie'}">
+      <span class="category-badge">${getCategoryName(movie.category)}</span>
+
+      <div class="poster-wrapper">
+        <img src="${movie.poster_url  'https://avatars.mds.yandex.net/i?id=a743a0666e377970b63b78ff3d9fa505_sr-5859751-images-thumbs&n=13'}" alt="${movie.title}">
         ${movie.status === 'planned' ? `
           <button class="mark-watched-btn">
             <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -129,10 +129,14 @@ function renderMovieCard(movie) {
             Отметить как просмотрено
           </button>
         ` : ''}
-        <button class="delete-btn">Удалить</button>
       </div>
-    `;
-  }
+
+      <h3>${movie.title} (${movie.year})</h3>
+      <p>★ ${movie.rating  '-'} | ${movie.genre  '-'}</p>
+      <button class="delete-btn">Удалить</button>
+    </div>
+  `;
+}
 
   function getCategoryName(category) {
     const categories = {
