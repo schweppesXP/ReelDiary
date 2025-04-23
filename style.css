@@ -38,6 +38,7 @@ h1 {
 }
 
 .movie-card {
+  position: relative;
   background: white;
   border-radius: 8px;
   overflow: hidden;
@@ -180,23 +181,38 @@ h1 {
 }
 
 .mark-watched-btn {
-  background-color: #00b894;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
   font-size: 16px;
-  width: 100%;
-  margin-top: 10px;
+  padding: 12px;
   cursor: pointer;
   font-family: inherit;
-  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.mark-watched-btn .check-icon {
+  width: 18px;
+  height: 18px;
+  stroke: white;
+  transition: stroke 0.3s ease;
 }
 
 .mark-watched-btn:hover {
-  background-color: #019875;
+  color: #00b894;
+  transform: scale(1.05);
 }
 
-.mark-watched-btn:active {
-  transform: translateY(1px);
+.mark-watched-btn:hover .check-icon {
+  stroke: #00b894;
 }
