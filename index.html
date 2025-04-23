@@ -9,15 +9,6 @@
 <body>
   <div class="container">
     <h1>Мои фильмы</h1>
-    
-    <!-- Добавляем кнопки категорий -->
-    <div class="categories">
-      <button class="category-btn active" data-category="all">Все</button>
-      <button class="category-btn" data-category="movie">Фильмы</button>
-      <button class="category-btn" data-category="series">Сериалы</button>
-      <button class="category-btn" data-category="cartoon">Мультфильмы</button>
-      <button class="category-btn" data-category="anime">Аниме</button>
-    </div>
 
     <form id="add-movie">
       <input type="text" id="title" placeholder="Название" required>
@@ -35,6 +26,15 @@
       <button type="submit">Добавить</button>
     </form> 
 
+    <!-- Добавляем кнопки категорий -->
+    <div class="categories">
+      <button class="category-btn active" data-category="all">Все</button>
+      <button class="category-btn" data-category="movie">Фильмы</button>
+      <button class="category-btn" data-category="series">Сериалы</button>
+      <button class="category-btn" data-category="cartoon">Мультфильмы</button>
+      <button class="category-btn" data-category="anime">Аниме</button>
+    </div>
+    
     <div id="movies-list" class="movies-grid"></div>
   </div>
 
