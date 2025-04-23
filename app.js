@@ -92,11 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const movie = {
       title: document.getElementById('title').value,
       year: parseInt(document.getElementById('year').value),
-      rating: parseFloat(document.getElementById('rating').value)  null,
-      genre: document.getElementById('genre').value  null,
-      poster_url: document.getElementById('poster_url').value  'https://via.placeholder.com/200x300',
-      category: document.getElementById('movie-category').value  'movie',
-      status: document.getElementById('movie-status').value  'planned'
+      rating: parseFloat(document.getElementById('rating').value) || null,
+      genre: document.getElementById('genre').value || null,
+      poster_url: document.getElementById('poster_url').value || 'https://via.placeholder.com/200x300',
+      category: document.getElementById('movie-category').value || 'movie',
+      status: document.getElementById('movie-status').value || 'planned'
     };
 
     try {
@@ -112,11 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderMovieCard(movie) {
     return `
-      <div class="movie-card" data-id="${movie.id}" data-category="${movie.category  'movie'}">
+      <div class="movie-card" data-id="${movie.id}" data-category="${movie.category || 'movie'}">
         <span class="category-badge">${getCategoryName(movie.category)}</span>
-        <img src="${movie.poster_url  'https://via.placeholder.com/200x300'}" alt="${movie.title}">
+        <img src="${movie.poster_url || 'https://via.placeholder.com/200x300'}" alt="${movie.title}">
         <h3>${movie.title} (${movie.year})</h3>
-        <p>★ ${movie.rating  '-'} | ${movie.genre  '-'}</p>
+        <p>★ ${movie.rating || '-'} | ${movie.genre || '-'}</p>
         ${movie.status === 'planned' ? `
           <button class="mark-watched-btn">Отметить как просмотрено</button>
         ` : ''}
