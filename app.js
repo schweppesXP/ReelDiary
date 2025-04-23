@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Добавление фильма (с категорией)
   addForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+    console.log(document.getElementById('title'));
+
     const movie = {
       title: document.getElementById('title').value,
       year: parseInt(document.getElementById('year').value),
