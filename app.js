@@ -33,13 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const planned = movies.filter(m => m.status !== 'watched');
 
       moviesList.innerHTML = `
-        <h2>Просмотрено</h2>
-        <div class="movies-grid">
-          ${watched.map(renderMovieCard).join('')}
-        </div>
         <h2>Хочу посмотреть</h2>
         <div class="movies-grid">
           ${planned.map(renderMovieCard).join('')}
+        </div>
+        <h2>Просмотрено</h2>
+        <div class="movies-grid">
+          ${watched.map(renderMovieCard).join('')}
         </div>
       `;
 
