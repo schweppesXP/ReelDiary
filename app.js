@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
       year: parseInt(document.getElementById('year').value),
       rating: parseFloat(document.getElementById('rating').value) || null,
       genre: document.getElementById('genre').value || null,
-      poster_url: document.getElementById('poster_url').value || 'https://via.placeholder.com/200x300',
+      poster_url: document.getElementById('poster_url').value || 'https://avatars.mds.yandex.net/i?id=a743a0666e377970b63b78ff3d9fa505_sr-5859751-images-thumbs&n=13',
       category: document.getElementById('movie-category').value || 'movie',
       status: document.getElementById('movie-status').value || 'planned'
     };
@@ -118,7 +118,7 @@ function renderMovieCard(movie) {
     return `
       <div class="movie-card" data-id="${movie.id}" data-category="${movie.category || 'movie'}">
         <span class="category-badge">${getCategoryName(movie.category)}</span>
-        <img src="${movie.poster_url || 'https://via.placeholder.com/200x300'}" alt="${movie.title}">
+        <img src="${movie.poster_url || 'https://avatars.mds.yandex.net/i?id=a743a0666e377970b63b78ff3d9fa505_sr-5859751-images-thumbs&n=13'}" alt="${movie.title}">
         <h3>${movie.title} (${movie.year})</h3>
         <p>★ ${movie.rating || '-'} | ${movie.genre || '-'}</p>
         ${movie.status === 'planned' ? `
