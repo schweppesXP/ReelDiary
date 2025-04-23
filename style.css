@@ -223,3 +223,50 @@ h1 {
 .mark-watched-btn:hover .check-icon {
   stroke: #00b894;
 }
+
+.start-watching-btn {
+  background-color: #00b894;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  margin: 10px;
+  cursor: pointer;
+  width: calc(100% - 20px);
+}
+
+.progress-container {
+  margin: 10px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  height: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #4361ee;
+  transition: width 0.3s;
+}
+
+.progress-container span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  text-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+.add-episode-btn {
+  background: #3f37c9;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  margin: 0 10px 10px;
+  cursor: pointer;
+  width: calc(100% - 20px);
+}
