@@ -170,3 +170,11 @@ h1 {
   border-radius: 4px;
   background: white;
 }
+
+#movies-list {
+  display: block; /* отключаем grid или flex */
+}
+
+.movie-block {
+  margin-bottom: 40px;
+}
