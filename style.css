@@ -76,7 +76,8 @@ h1 {
 }
 
 #add-movie input,
-#add-movie button {
+#add-movie button,
+#add-movie select {
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
