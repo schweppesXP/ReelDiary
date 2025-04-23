@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-   const moviesList = document.getElementById('movies-list');
+  const moviesList = document.getElementById('movies-list');
   const addForm = document.getElementById('add-movie');
   let currentCategory = 'all';
 
