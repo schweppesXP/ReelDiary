@@ -4,16 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2YWZxanp5anNtb2hveWl5ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NTI2ODEsImV4cCI6MjA2MDMyODY4MX0.yI1HHIXMxy53MEw17GTh1tcKe9GcaDoUReZekF7S97g';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-  // DOM элементы
-  const moviesList = document.getElementById('movies-list');
+   const moviesList = document.getElementById('movies-list');
   const addForm = document.getElementById('add-movie');
   let currentCategory = 'all';
 
-  // Функция загрузки фильмов
   async function loadMovies(category = 'all') {
     try {
       moviesList.innerHTML = '<p>Загрузка...</p>';
-      
+
       let query = supabase
         .from('movies')
         .select('*')
@@ -24,27 +22,35 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const { data: movies, error } = await query;
-
       if (error) throw error;
 
-      if (movies.length === 0) {
+      if (!movies  movies.length === 0) {
         moviesList.innerHTML = '<p>Фильмов нет. Добавьте первый!</p>';
         return;
       }
 
-      moviesList.innerHTML = movies.map(movie => `
-        <div class="movie-card" data-id="${movie.id}" data-category="${movie.category || 'movie'}">
-          <span class="category-badge">${getCategoryName(movie.category)}</span>
-          <img src="${movie.poster_url || 'https://via.placeholder.com/200x300'}" alt="${movie.title}">
-          <h3>${movie.title} (${movie.year})</h3>
-          <p>★ ${movie.rating || '-'} | ${movie.genre || '-'}</p>
-          <button class="delete-btn">Удалить</button>
-        </div>
-      `).join('');
+      const watched = movies.filter(m => m.status === 'watched');
+      const planned = movies.filter(m => m.status !== 'watched');
 
-      // Вешаем обработчики удаления
+      moviesList.innerHTML = `
+        <h2>Просмотрено</h2>
+        <div class="movies-grid">
+          ${watched.map(renderMovieCard).join('')}
+        </div>
+        <h2>Хочу посмотреть</h2>
+        <div class="movies-grid">
+          ${planned.map(renderMovieCard).join('')}
+        </div>
+      `;
+
+      // Обработчики удаления
       document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', deleteMovie);
+      });
+
+      // Обработчики "отметить как просмотрено"
+      document.querySelectorAll('.mark-watched-btn').forEach(btn => {
+        btn.addEventListener('click', markAsWatched);
       });
 
     } catch (err) {
@@ -53,18 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Удаление фильма (без изменений)
   async function deleteMovie(e) {
     if (!confirm('Удалить этот фильм?')) return;
-    
     const movieId = e.target.closest('.movie-card').dataset.id;
-    
     try {
-      const { error } = await supabase
-        .from('movies')
-        .delete()
-        .eq('id', movieId);
-
+      const { error } = await supabase.from('movies').delete().eq('id', movieId);
       if (error) throw error;
       loadMovies(currentCategory);
     } catch (err) {
@@ -73,27 +72,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Добавление фильма (с категорией)
-  addForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    console.log(document.getElementById('title'));
-
-    const movie = {
-      title: document.getElementById('title').value,
-      year: parseInt(document.getElementById('year').value),
-      rating: parseFloat(document.getElementById('rating').value) || null,
-      genre: document.getElementById('genre').value || null,
-      poster_url: document.getElementById('poster_url').value || 'https://steamuserimages-a.akamaihd.net/ugc/2079019457927111911/45068F1A462AF6EB757ADABDD621AB5FDE49E38E/?imw=512&amp;imh=512&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true',
-      category: document.getElementById('movie-category').value || 'movie'
-    };
-
+  async function markAsWatched(e) {
+    const movieId = e.target.closest('.movie-card').dataset.id;
     try {
       const { error } = await supabase
         .from('movies')
-        .insert([movie]);
-
+        .update({ status: 'watched' })
+        .eq('id', movieId);
       if (error) throw error;
-      
+      loadMovies(currentCategory);
+    } catch (err) {
+      console.error('Ошибка при обновлении статуса:', err);
+      alert('Не удалось изменить статус');
+    }
+  }
+
+  addForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const movie = {
+      title: document.getElementById('title').value,
+      year: parseInt(document.getElementById('year').value),
+      rating: parseFloat(document.getElementById('rating').value)  null,
+      genre: document.getElementById('genre').value  null,
+      poster_url: document.getElementById('poster_url').value  'https://via.placeholder.com/200x300',
+      category: document.getElementById('movie-category').value  'movie',
+      status: document.getElementById('movie-status').value  'planned'
+    };
+
+    try {
+      const { error } = await supabase.from('movies').insert([movie]);
+      if (error) throw error;
       e.target.reset();
       loadMovies(currentCategory);
     } catch (err) {
@@ -102,7 +110,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Вспомогательная функция для категорий
+function renderMovieCard(movie) {
+    return `
+      <div class="movie-card" data-id="${movie.id}" data-category="${movie.category  'movie'}">
+        <span class="category-badge">${getCategoryName(movie.category)}</span>
+        <img src="${movie.poster_url  'https://via.placeholder.com/200x300'}" alt="${movie.title}">
+        <h3>${movie.title} (${movie.year})</h3>
+        <p>★ ${movie.rating  '-'} | ${movie.genre  '-'}</p>
+        ${movie.status === 'planned' ? `
+          <button class="mark-watched-btn">Отметить как просмотрено</button>
+        ` : ''}
+        <button class="delete-btn">Удалить</button>
+      </div>
+    `;
+  }
+
   function getCategoryName(category) {
     const categories = {
       movie: 'Фильм',
@@ -113,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return categories[category] || '';
   }
 
-  // Обработчики кнопок категорий
   document.querySelectorAll('.category-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       currentCategory = btn.dataset.category;
@@ -123,6 +144,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Запускаем приложение
   loadMovies();
 });
